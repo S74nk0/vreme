@@ -21,9 +21,10 @@ function createWindow() {
     },
   });
 
-  // and load the index.html of the app.
-  // mainWindow.loadFile('index.html')
-  mainWindow.loadURL("https://www.google.com/search?q=vreme");
+  let isVreme = true;
+  const vremeURL = "https://www.google.com/search?q=vreme";
+  const radarskaSlikaURL = "http://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif";
+  isVreme ? mainWindow.loadURL(vremeURL) : mainWindow.loadURL(radarskaSlikaURL);
 
   const initVreme = () => {
     const execVreme = `
@@ -135,7 +136,9 @@ function createWindow() {
         lastSpaceInput = nowSpaceInput;
         event.preventDefault();
         mainWindow.reload();
+        mainWindow.loadURL(vremeURL);
       }
+      event.preventDefault();
     }
     if (input.key == "KeyU" || input.code == "KeyU") {
       console.log("UPDATE");
@@ -150,6 +153,15 @@ function createWindow() {
         });
       }
       isUpdateCalled = true;
+    }
+    
+    if ((input.key.includes("Digit1") || input.code.includes("Digit1")) && !isVreme) {
+      isVreme = true;
+      mainWindow.loadURL(vremeURL);
+    }
+    if ((input.key.includes("Digit2") || input.code.includes("Digit2")) && isVreme) {
+      isVreme = false;
+      mainWindow.loadURL(radarskaSlikaURL);
     }
   });
 
