@@ -22,9 +22,9 @@ function createWindow() {
   });
 
   const pages = [
-    {"id": 1, "name": "TemnicaVreme", "url": "https://www.google.com/search?q=temnica+vreme" },
-    {"id": 2, "name": "Radarska", "url": "http://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif" },
-    {"id": 3, "name": "Vreme", "url": "https://www.google.com/search?q=vreme" }
+    { "id": 1, "name": "TemnicaVreme", "url": "https://www.google.com/search?q=temnica+vreme" },
+    { "id": 2, "name": "Radarska", "url": "http://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif" },
+    { "id": 3, "name": "RenčeVreme", "url": "https://www.google.com/search?q=renče+vreme" }
   ];
   let selectPageIndex = -1;
   const goToPage = (nameOrId = "TemnicaVreme") => {
@@ -118,7 +118,7 @@ function createWindow() {
     let count = 0;
     const pressA_interval = setInterval(() => {
       let bat = spawn("xdotool", ["key", "a"]);
-      bat.on("error", () => {});
+      bat.on("error", () => { });
       count = 1 + count;
       if (count == 5) clearInterval(pressA_interval);
     }, 1000);
@@ -164,7 +164,7 @@ function createWindow() {
       }
       isUpdateCalled = true;
     }
-    
+
     if (input.key.includes("Digit1") || input.code.includes("Digit1")) {
       goToPage(1);
     }
