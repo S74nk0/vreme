@@ -21,10 +21,21 @@ function createWindow() {
     },
   });
 
-  let isVreme = true;
-  const vremeURL = "https://www.google.com/search?q=vreme";
-  const radarskaSlikaURL = "http://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif";
-  isVreme ? mainWindow.loadURL(vremeURL) : mainWindow.loadURL(radarskaSlikaURL);
+  const pages = [
+    {"id": 1, "name": "TemnicaVreme", "url": "https://www.google.com/search?q=temnica+vreme" },
+    {"id": 2, "name": "Radarska", "url": "http://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0-rm-anim.gif" },
+    {"id": 3, "name": "Vreme", "url": "https://www.google.com/search?q=vreme" }
+  ];
+  let selectPageIndex = -1;
+  const goToPage = (nameOrId = "TemnicaVreme") => {
+    const index = pages.findIndex(page => page.id == nameOrId || page.name == nameOrId);
+    if (selectPageIndex != index && index != -1) {
+      const url = pages[index].url;
+      selectPageIndex = index;
+      mainWindow.loadURL(url);
+    }
+  };
+  goToPage();
 
   const initVreme = () => {
     const execVreme = `
@@ -131,12 +142,11 @@ function createWindow() {
     if (input.key == "Space" || input.code == "Space") {
       const nowSpaceInput = new Date().getTime() | 0;
       const diff = (nowSpaceInput - lastSpaceInput) / 1000;
-      // allow restart every 30 seconds
-      if (diff > 30) {
+      // allow restart every 6 seconds
+      if (diff > 6) {
         lastSpaceInput = nowSpaceInput;
         event.preventDefault();
         mainWindow.reload();
-        mainWindow.loadURL(vremeURL);
       }
       event.preventDefault();
     }
@@ -155,13 +165,14 @@ function createWindow() {
       isUpdateCalled = true;
     }
     
-    if ((input.key.includes("Digit1") || input.code.includes("Digit1")) && !isVreme) {
-      isVreme = true;
-      mainWindow.loadURL(vremeURL);
+    if (input.key.includes("Digit1") || input.code.includes("Digit1")) {
+      goToPage(1);
     }
-    if ((input.key.includes("Digit2") || input.code.includes("Digit2")) && isVreme) {
-      isVreme = false;
-      mainWindow.loadURL(radarskaSlikaURL);
+    if (input.key.includes("Digit2") || input.code.includes("Digit2")) {
+      goToPage(2);
+    }
+    if (input.key.includes("Digit3") || input.code.includes("Digit3")) {
+      goToPage(3);
     }
   });
 
