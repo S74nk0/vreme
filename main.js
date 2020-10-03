@@ -9,7 +9,7 @@ function createWindow() {
     width: 800,
     height: 600,
     frame: true, // release lahko daš tole
-    fullscreen: false,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: false,
       devTools: true,
