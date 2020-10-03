@@ -9,7 +9,7 @@ function createWindow() {
     width: 800,
     height: 600,
     frame: true, // release lahko daš tole
-    fullscreen: true,
+    fullscreen: false,
     webPreferences: {
       nodeIntegration: false,
       devTools: true,
@@ -43,8 +43,10 @@ function createWindow() {
       const dnevi = document.getElementById('wob_db');
       const nextTempPadavineVeter = (() => {
         let current = 0;
-        const next = () => {
-          current = (current+1)%3;
+        const next = (prev = false) => {
+          const n = (prev ? -1 : 1);
+          current = (current+n)%3;
+          if (current < 0) current = 2;
           const temperature = document.getElementById('wob_temp');
           const rain = document.getElementById('wob_rain');
           const wind = document.getElementById('wob_wind');
@@ -56,8 +58,10 @@ function createWindow() {
       })();
       const nextDay = (() => {
         let current = 0;
-        const next = () => {
-          current = (current+1)%8;
+        const next = (prev = false) => {
+          const n = (prev ? -1 : 1);
+          current = (current+n)%8;
+          if (current < 0) current = 7;
           const day = wob_wc.getElementsByClassName("gic")[1].firstElementChild.getElementsByClassName('wob_df')[current];
           day.click();
         } 
@@ -81,6 +85,24 @@ function createWindow() {
         }
         if (e.code == 'NumpadAdd' || e.code == 'KeyN') {
           nextDay();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        // alert(e.code);
+        // always go fullscreen
+        hideOther();
+        wob_wc.requestFullscreen();
+        if (e.code == 'ArrowRight') {
+           nextDay();
+        }
+        if (e.code == 'ArrowLeft') {
+           nextDay(true);
+        }
+        if (e.code == 'ArrowUp') {
+          nextTempPadavineVeter(); 
+        }
+        if (e.code == 'ArrowDown') {
+          nextTempPadavineVeter(true); 
         }
       });
       hideOther();
